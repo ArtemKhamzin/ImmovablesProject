@@ -1,0 +1,59 @@
+﻿@page
+@using Sem.Models
+@model Sem.Pages.EditProfile
+
+@{
+    ViewData["Title"] = "Редактирование профиля";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="container text-light">
+        <h1>Редактирование профиля</h1>
+        @{
+            if (Model.User.Status == Status.Bank)
+            {
+                <div>
+                    <label class="font-weight-bold" asp-for="NewName">Наименование банка</label>
+                    <input asp-for="NewName" placeholder="Введите новое имя" value="@Model.User?.Name">
+                </div>
+            }
+            else
+            {
+                <div>
+                    <label class="font-weight-bold text-light" asp-for="NewPhoto"></label>
+                    <span class="text-danger font-weight-bold" asp-validation-for="NewPhoto"></span><br>
+                    <input type="file" accept=".jpg, .jpeg, .png, .jfif" asp-for="NewPhoto"
+                           value="@Model.User.Photo">
+                </div>
+        
+                <div>
+                    <label class="font-weight-bold mt-3" asp-for="NewName"></label>
+                    <span class="text-danger font-weight-bold" asp-validation-for="NewName"></span>
+                    <input asp-for="NewName" placeholder="Введите новое имя" value="@Model.User?.Name">
+                </div>
+        
+                <div>
+                    <label class="font-weight-bold" asp-for="NewSurname"></label>
+                    <span class="text-danger font-weight-bold" asp-validation-for="NewSurname"></span>
+                    <input asp-for="NewSurname" placeholder="Введите новую фамилию" value="@Model.User?.Surname">
+                </div>
+            }
+        }
+        <div>
+            <label class="font-weight-bold" asp-for="NewPhoneNumber"></label>
+            <span class="text-danger font-weight-bold" asp-validation-for="NewPhoneNumber"></span>
+            <input asp-for="NewPhoneNumber" placeholder="Введите новый номер телефона" value="@Model.User?.PhoneNumber">
+        </div>
+
+        <div class="d-flex">
+            <input type="button" class="registerbtn font-weight-bold" onclick="history.back();" value="Назад"/>
+            <input type="submit" class="registerbtn font-weight-bold ml-3" value="Сохранить">
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}
+

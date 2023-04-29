@@ -1,0 +1,84 @@
+﻿@model Sem.Pages.SalePage
+
+<button type="button" class="registerbtn font-weight-bold mt-3" data-toggle="modal" data-target="#exampleModal">
+    Выставить недвижимость на продажу
+</button>
+<form method="post" enctype="multipart/form-data">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="exampleModalLabel">Добавить недвижимость на продажу</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="PhotoForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="PhotoForSale"></span>
+                        <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="PhotoForSale">
+                    </div><br>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="TypeOfImmovablesForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="TypeOfImmovablesForSale"></span>
+                        <input type="text" asp-for="TypeOfImmovablesForSale" placeholder="Введите тип недвижимости">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="CityForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="CityForSale"></span>
+                        <input type="text" asp-for="CityForSale" placeholder="Введите город">
+                    </div>
+                    
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="StreetForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="StreetForSale"></span>
+                        <input type="text" asp-for="StreetForSale" placeholder="Введите улицу">
+                    </div>
+                    
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="HouseForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="HouseForSale"></span>
+                        <input type="number" asp-for="HouseForSale" placeholder="Введите номер дома" value="">
+                    </div>
+                    
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="BuildingForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="BuildingForSale"></span>
+                        <input type="number" asp-for="BuildingForSale" placeholder="Введите корпус дома" value="">
+                    </div>
+                    
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="ApartmentForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="ApartmentForSale"></span>
+                        <input type="number" asp-for="ApartmentForSale" placeholder="Введите номер квартиры" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="NumberOfRoomsForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="NumberOfRoomsForSale"></span>
+                        <input type="number" asp-for="NumberOfRoomsForSale" placeholder="Введите количество комнат" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="RoomAreaForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="RoomAreaForSale"></span>
+                        <input type="number" asp-for="RoomAreaForSale" placeholder="Введите площадь недвижимости" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="PriceForSale"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="PriceForSale"></span>
+                        <input type="number" asp-for="PriceForSale" placeholder="Введите цену" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="registerbtn font-weight-bold" data-dismiss="modal">Закрыть</button>
+                    <input type="submit" class="registerbtn font-weight-bold" value="Добавить">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,71 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model Sem.Pages.SalePage
+@using Sem.Models
+
+
+@{
+    ViewData["Title"] = "Продажа";
+
+    if (HttpContext.Items["user"] is User)
+    {
+        <h1 class="text-light text-left">Мои недвижимости на продажу</h1>
+
+        <partial name="Partials/SaleAdd"></partial>
+
+        <div id="ImmovableForSale">
+            @foreach (var sale in Model.Sales)
+            {
+                <div class="row text-light mt-5">
+                    <div class="col-lg-5">
+                        <h2 class="font-weight-bold">@sale.Immovable.TypeOfImmovable</h2>
+                        <a asp-page="/AboutImmovable" asp-route-id="@sale.Id">
+                            <img class="img mt-3" src="@sale.Immovable.Photo" alt="photo"/>
+                        </a>
+                    </div>
+                    <div class="mr-5 mt-5">
+                        <h5 class="font-weight-bold mt-3">Адрес: </h5>
+                        @if (sale.Immovable.Building != 0)
+                        {
+                            <div>
+                                г. @sale.Immovable.City, ул. @sale.Immovable.Street,
+                                д. @sale.Immovable.House/@sale.Immovable.Building, кв. @sale.Immovable.Apartment
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                г. @sale.Immovable.City, ул. @sale.Immovable.Street,
+                                д. @sale.Immovable.House, кв. @sale.Immovable.Apartment
+                            </div>
+                        }
+                        <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@sale.Immovable.NumberOfRooms
+                        <h5 class="font-weight-bold mt-3">Площадь: </h5>@sale.Immovable.RoomArea м
+                        <sup>
+                            <small>2</small>
+                        </sup>
+                        <h3 class="font-weight-bold mt-3">Цена: </h3>@sale.Price ₽
+                        <form method="POST">
+                            <input type="submit" asp-page-handler="Delete" asp-route-id="@sale.Id" class="mt-5 registerbtn font-weight-bold" value="Удалить"/>
+                        </form>
+                    </div>
+                    <div class="ml-5 mt-5 text-right">
+                        <h5 class="font-weight-bold mt-3">Дата публикации: </h5>@sale.PostingDate.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            }
+        </div>
+        <button type="button" id="show-more-sale" class="registerbtn font-weight-bold mt-3">Показать больше</button>
+    }
+    else
+    {
+        <div class="container text-light text-center">
+            <h1><a class="text-light" asp-page="/Authorization">Авторизуйтесь</a>, чтобы выставить недвижимость на продажу</h1>
+        </div>
+    }
+}
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}

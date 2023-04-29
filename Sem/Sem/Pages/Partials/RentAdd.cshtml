@@ -1,0 +1,84 @@
+﻿@model Sem.Pages.Rent
+
+<button type="button" class="registerbtn font-weight-bold mt-3" data-toggle="modal" data-target="#exampleModal">
+    Добавить недвижимость для сдачи в аренду
+</button>
+<form method="post" enctype="multipart/form-data">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="exampleModalLabel">Добавить недвижимость для сдачи в аренду</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="PhotoForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="PhotoForRent"></span>
+                        <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="PhotoForRent">
+                    </div><br>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="TypeOfImmovablesForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="TypeOfImmovablesForRent"></span>
+                        <input type="text" asp-for="TypeOfImmovablesForRent" placeholder="Введите тип недвижимости">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="CityForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="CityForRent"></span>
+                        <input type="text" asp-for="CityForRent" placeholder="Введите город">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="StreetForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="StreetForRent"></span>
+                        <input type="text" asp-for="StreetForRent" placeholder="Введите улицу">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="HouseForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="HouseForRent"></span>
+                        <input type="number" asp-for="HouseForRent" placeholder="Введите номер дома" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="BuildingForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="BuildingForRent"></span>
+                        <input type="number" asp-for="BuildingForRent" placeholder="Введите корпус дома" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="ApartmentForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="ApartmentForRent"></span>
+                        <input type="number" asp-for="ApartmentForRent" placeholder="Введите номер квартиры" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="NumberOfRoomsForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="NumberOfRoomsForRent"></span>
+                        <input type="number" asp-for="NumberOfRoomsForRent" placeholder="Введите количество комнат" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="RoomAreaForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="RoomAreaForRent"></span>
+                        <input type="number" asp-for="RoomAreaForRent" placeholder="Введите площадь недвижимости" value="">
+                    </div>
+
+                    <div>
+                        <label class="font-weight-bold text-light" asp-for="PriceForRent"></label>
+                        <span class="text-danger font-weight-bold" asp-validation-for="PriceForRent"></span>
+                        <input type="number" asp-for="PriceForRent" placeholder="Введите цену" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="registerbtn font-weight-bold" data-dismiss="modal">Закрыть</button>
+                    <input type="submit" class="registerbtn font-weight-bold" value="Добавить">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

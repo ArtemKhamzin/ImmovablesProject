@@ -1,0 +1,43 @@
+﻿@page
+@model Sem.Pages.Registration
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<form method="post">
+    <div class="container text-light">
+        <h1>Регистрация</h1>
+        <p>Пожалуйста, заполните форму, чтобы создать учетную запись.</p>
+        <div>
+            <label class="font-weight-bold" asp-for="EmailAddress"></label>
+            <input type="email" asp-for="EmailAddress" placeholder="Введите Email">
+            <span class="text-danger font-weight-bold" asp-validation-for="EmailAddress"></span>
+        </div>
+        
+        <div>
+            <label class="font-weight-bold" asp-for="Password"></label>
+            <input type="password" asp-for="Password" placeholder="Введите пароль">
+            <span class="text-danger font-weight-bold" asp-validation-for="Password"></span>
+        </div>
+        
+        <div>
+            <label class="font-weight-bold" asp-for="ConfirmPassword"></label>
+            <input type="password" asp-for="ConfirmPassword" placeholder="Повторите пароль">
+            <span class="text-danger font-weight-bold" asp-validation-for="ConfirmPassword"></span>
+        </div>
+        
+        <div>
+            <h5><input type="checkbox" asp-for="IsBank"> Зарегистрироваться как банк</h5>
+        </div>
+
+        <input type="submit" class="registerbtn font-weight-bold" value="Регистрация">
+    
+        <p>Уже есть аккаунт? <a class="text-light" asp-page="/Authorization">Авторизуйтесь</a>.</p>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}

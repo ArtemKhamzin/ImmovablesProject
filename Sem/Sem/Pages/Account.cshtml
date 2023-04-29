@@ -1,0 +1,52 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@using Sem.Models
+@model Sem.Pages.Account
+
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<div class="text-left">
+    <h1>Личный кабинет пользователя</h1>
+</div>
+@{
+    var user = HttpContext.Items["user"] as User;
+    if (user != null)
+    {
+        if (user.Status == Status.Bank)
+        {
+            <div class="text-left mt-5">
+                <h2>Наименование банка: @user.Name</h2>
+                <h2>Почта: @user.Email</h2>
+                <h2>Номер телефона: @user.PhoneNumber</h2>
+            </div>
+        }
+        else
+        {
+            <div class="text-left">
+                <img class="photo mt-3" src="@user.Photo" alt="photo"/>
+                <h2 class="mt-4">Имя: @user.Name</h2>
+                <h2>Фамилия: @user.Surname</h2>
+                <h2>Почта: @user.Email</h2>
+                <h2>Номер телефона: @user.PhoneNumber</h2>
+            </div>
+        }
+        
+        <div class="d-flex">
+            <a class="registerbtn font-weight-bold" asp-area="" asp-page="/EditProfile">Редактировать</a>
+            
+            <form method="POST">
+                <input type="submit" asp-page-handler="Exit" class="ml-3 registerbtn font-weight-bold h-75" value="Выход"/>
+            </form>
+        </div>
+    }
+}
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}
+
+
+    

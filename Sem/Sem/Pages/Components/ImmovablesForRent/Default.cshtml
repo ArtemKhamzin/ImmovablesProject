@@ -1,0 +1,42 @@
+﻿@model IQueryable<Sem.Models.Rent>
+
+@foreach (var rent in Model)
+{
+    <div class="row text-light mt-5">
+        <div class="col-lg-5">
+            <h2 class="font-weight-bold">@rent.Immovable.TypeOfImmovable</h2>
+            <a asp-page="/AboutImmovable" asp-route-id="@rent.Id">
+                <img class="img mt-3" src="@rent.Immovable.Photo" alt="photo"/>
+            </a>
+        </div>
+        <div class="mr-5 mt-5">
+            <h5 class="font-weight-bold mt-3">Адрес: </h5>
+            @if (rent.Immovable.Building != 0)
+            {
+                <div>
+                    г. @rent.Immovable.City, ул. @rent.Immovable.Street,
+                    д. @rent.Immovable.House/@rent.Immovable.Building, кв. @rent.Immovable.Apartment
+                </div>
+            }
+            else
+            {
+                <div>
+                    г. @rent.Immovable.City, ул. @rent.Immovable.Street,
+                    д. @rent.Immovable.House, кв. @rent.Immovable.Apartment
+                </div>
+            }
+            <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@rent.Immovable.NumberOfRooms
+            <h5 class="font-weight-bold mt-3">Площадь: </h5>@rent.Immovable.RoomArea м
+            <sup>
+                <small>2</small>
+            </sup>
+            <h3 class="font-weight-bold mt-3">Оплата: </h3>@rent.Price ₽/мес.
+            <form method="POST">
+                <input type="submit" asp-page-handler="Delete" asp-route-id="@rent.Id" class="mt-5 registerbtn font-weight-bold" value="Удалить"/>
+            </form>
+        </div>
+        <div class="ml-5 mt-5 text-right">
+            <h5 class="font-weight-bold mt-3">Дата публикации: </h5>@rent.PostingDate.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+}

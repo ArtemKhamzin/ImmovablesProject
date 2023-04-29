@@ -1,0 +1,168 @@
+﻿@page
+@using Sem.Models
+@using Microsoft.AspNetCore.Http
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Недвижимость";
+}
+
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+        <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="CarouselImages/1621356865_15-phonoteka_org-p-mnogokvartirnie-doma-fon-21.jpg" class="carouselimg d-block w-100" alt="1">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Умный дом</h5>
+                <p>Живите "с умом"!</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="CarouselImages/___1_2016min.jpg" class="carouselimg d-block w-100" alt="2">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>ЖК "Изумрудный"</h5>
+                <p>Живи счастливо! Живи в Изумрудном!</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="CarouselImages/zhk_bol_shoj_krasnodar_maket_5.jpg" class="carouselimg d-block w-100" alt="3">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>ЖК "Светлая долина"</h5>
+                <p>Бесконечная элегантность</p>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Предыдущий</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Следующий</span>
+    </a>
+</div>
+
+<div>
+    <button class="collapsebtn" type="button" data-toggle="collapse" data-target="#collapseBuy" aria-expanded="false" aria-controls="collapseBuy">
+        Купить недвижимость
+    </button>
+    <div class="collapse" id="collapseBuy">
+        <div class="card card-body">
+            @foreach (var sale in Model.Sales)
+            {
+                <div class="row text-light mt-5">
+                    <div class="col-lg-5">
+                        <h2 class="font-weight-bold">@sale.Immovable.TypeOfImmovable</h2>
+                        <a asp-page="/AboutImmovable" asp-route-id="@sale.Id">
+                            <img class="img mt-3" src="@sale.Immovable.Photo" alt="photo"/>
+                        </a>
+                    </div>
+                    <div class="mr-5 mt-5">
+                        <h5 class="font-weight-bold mt-3">Адрес: </h5>
+                        @if (sale.Immovable.Building != 0)
+                        {
+                            <div>
+                                г. @sale.Immovable.City, ул. @sale.Immovable.Street,
+                                д. @sale.Immovable.House/@sale.Immovable.Building, кв. @sale.Immovable.Apartment
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                г. @sale.Immovable.City, ул. @sale.Immovable.Street,
+                                д. @sale.Immovable.House, кв. @sale.Immovable.Apartment
+                            </div>
+                        }
+                        <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@sale.Immovable.NumberOfRooms
+                        <h5 class="font-weight-bold mt-3">Площадь: </h5>@sale.Immovable.RoomArea м<sup><small>2</small></sup>
+                        <h3 class="price font-weight-bold mt-3">Цена:<br> @sale.Price ₽</h3>
+                        @{
+                            var user = HttpContext.Items["user"] as User;
+                            if (user != null && Model.AdminUser.Status == Status.Admin)
+                            {
+                                <form method="POST">
+                                    <input type="submit" asp-page-handler="DeleteSale" asp-route-id="@sale.Id" class="registerbtn font-weight-bold" value="Удалить"/>
+                                </form>
+                            }
+                        }
+                    </div>
+                    <div class="ml-5 mt-5">
+                        <h2></h2>
+                        <h5 class="font-weight-bold mt-3">Телефон: </h5>@sale.User.PhoneNumber
+                        <h5 class="font-weight-bold mt-3">Почта: </h5>@sale.User.Email
+                    </div>
+                    <div class="ml-5 text-left">
+                        <h5 class="font-weight-bold mt-3">Дата публикации: </h5>@sale.PostingDate.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    <button class="collapsebtn" type="button" data-toggle="collapse" data-target="#collapseRent" aria-expanded="false" aria-controls="collapseRent">
+        Арендовать недвижимость
+    </button>
+    <div class="collapse" id="collapseRent">
+        <div class="card card-body">
+            @foreach (var rent in Model.Rents)
+            {
+                <div class="row text-light mt-5">
+                    <div class="col-lg-5">
+                        <h2 class="font-weight-bold">@rent.Immovable.TypeOfImmovable</h2>
+                        <a asp-page="/AboutImmovable" asp-route-id="@rent.Id">
+                            <img class="img mt-3" src="@rent.Immovable.Photo" alt="photo"/>
+                        </a>
+                    </div>
+                    <div class="mr-5 mt-5">
+                        <h5 class="font-weight-bold mt-3">Адрес: </h5>
+                        @if (rent.Immovable.Building != 0)
+                        {
+                            <div>
+                                г. @rent.Immovable.City, ул. @rent.Immovable.Street,
+                                д. @rent.Immovable.House/@rent.Immovable.Building, кв. @rent.Immovable.Apartment
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                г. @rent.Immovable.City, ул. @rent.Immovable.Street,
+                                д. @rent.Immovable.House, кв. @rent.Immovable.Apartment
+                            </div>
+                        }
+                        <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@rent.Immovable.NumberOfRooms
+                        <h5 class="font-weight-bold mt-3">Площадь: </h5>@rent.Immovable.RoomArea м<sup><small>2</small></sup>
+                        <h3 class="price font-weight-bold mt-3">Оплата:<br> @rent.Price ₽/мес.</h3>
+                        @{
+                            var user = HttpContext.Items["user"] as User;
+                            if (user != null && Model.AdminUser.Status == Status.Admin)
+                            {
+                                <form method="POST">
+                                    <input type="submit" asp-page-handler="DeleteRent" asp-route-id="@rent.Id" class="registerbtn font-weight-bold" value="Удалить"/>
+                                </form>
+                            }
+                        }
+                    </div>
+                    <div class="ml-5 mt-5">
+                        <h2></h2>
+                        <h5 class="font-weight-bold mt-3">Телефон: </h5>@rent.User.PhoneNumber
+                        <h5 class="font-weight-bold mt-3">Почта: </h5>@rent.User.Email
+                    </div>
+                    <div class="ml-5 text-left">
+                        <h5 class="font-weight-bold mt-3">Дата публикации: </h5>@rent.PostingDate.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}

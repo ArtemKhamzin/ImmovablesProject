@@ -1,0 +1,113 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@using Sem.Models
+@model Sem.Pages.Mortgage
+
+@{
+    ViewData["Title"] = "Ипотека";
+}
+<h1 class="text-light text-left">Предложения по ипотеке</h1>
+
+@{
+    var user = HttpContext.Items["user"] as User;
+    if (user != null && (user.Status == Status.Bank) | (user.Status == Status.Admin))
+    {
+        <button type="button" class="registerbtn font-weight-bold mt-3" data-toggle="modal" data-target="#exampleModal">
+            Добавить ипотеку
+        </button>
+        <form method="post" id="mortgage-form">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-light" id="exampleModalLabel">Добавить ипотеку</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="Bank"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="Bank"></span>
+                                <input type="text" asp-for="Bank" placeholder="Введите наименование банка">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="MortgageRate"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="MortgageRate"></span>
+                                <input type="number" asp-for="MortgageRate" placeholder="Введите ипотечную ставку" value="">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="MonthlyPayment"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="MonthlyPayment"></span>
+                                <input type="number" asp-for="MonthlyPayment" placeholder="Введите ежемесячный платеж" value="">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="Term"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="Term"></span>
+                                <input type="number" asp-for="Term" placeholder="Введите срок ипотеки" value="">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="registerbtn font-weight-bold" data-dismiss="modal">Закрыть</button>
+                            <input type="submit" class="registerbtn font-weight-bold" value="Добавить">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+}
+
+<table class="table table-hover font-weight-bold text-light text-center mt-5">
+    <thead>
+    <tr>
+        <th scope="col">Банк</th>
+        <th scope="col">Ставка (%)</th>
+        <th scope="col">Платеж (₽/мес.)</th>
+        <th scope="col">Срок ипотеки (лет/года)</th>
+        @{
+            var userForTable = HttpContext.Items["user"] as User;
+
+            if (userForTable != null && (user.Status == Status.Bank) | (user.Status == Status.Admin))
+            {
+                <th scope="col"></th>
+            }
+        }
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        foreach (var mortgage in Model.Mortgages)
+        {
+            <tr>
+                <th>@mortgage.Bank</th>
+                <td>@mortgage.MortgageRate</td>
+                <td>@mortgage.MonthlyPayment</td>
+                <td>@mortgage.Term</td>
+                @{
+                    if (user != null && (user.Status == Status.Bank) | (user.Status == Status.Admin))
+                    {
+                        if ((mortgage.User == user) | (user.Status == Status.Admin))
+                        {
+                            <td>
+                                <form method="POST" class="mb-2">
+                                    <input type="submit" asp-page-handler="DeleteMortgage" asp-route-id="@mortgage.MortgageId" class="registerbtn font-weight-bold" value="Удалить"/>
+                                </form>
+                            </td>
+                        }
+                    }
+                }
+            </tr>
+        }
+    }
+    </tbody>
+
+</table>
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}

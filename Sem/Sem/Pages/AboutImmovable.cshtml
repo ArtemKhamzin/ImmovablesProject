@@ -1,0 +1,385 @@
+﻿@page
+@model Sem.Pages.AboutImmovable
+@using Sem.Models
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = Model.SaleDetails?.Immovable.TypeOfImmovable + Model.RentDetails?.Immovable.TypeOfImmovable;
+}
+
+@if (Model.RentDetails == null)
+{
+    <div class="row text-light mt-5">
+        <div class="col-lg-5">
+            <h2 class="font-weight-bold">@Model.SaleDetails?.Immovable.TypeOfImmovable</h2>
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    @if (Model.SaleDetails?.Immovable.SchemeImage != null)
+                    {
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img id="myImg" class="d-block w-100 img mt-3" src="@Model.SaleDetails?.Immovable.Photo" alt="photo"/>
+                    </div>
+                    @if (Model.SaleDetails?.Immovable.SchemeImage != null)
+                    {
+                        <div class="carousel-item">
+                            <img id="myImg2" class="d-block w-100 img mt-3" src="@Model.SaleDetails?.Immovable.SchemeImage" alt="scheme"/>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Следующий</span>
+                </button>
+            </div>
+            
+            <div id="myModal" class="modal">
+                <span class="close1">&times;</span>
+                <img class="modal-content" id="img01">
+            </div>
+            
+            <div id="myModal2" class="modal">
+                <span class="close2">&times;</span>
+                <img class="modal-content" id="img02">
+            </div>
+        </div>
+        
+        <div class="ml-5 mt-5">
+            <h5 class="font-weight-bold mt-3">Адрес: </h5>
+            @if (Model.SaleDetails?.Immovable.Building != 0)
+            {
+                <div>
+                    г. @Model.SaleDetails?.Immovable.City, ул. @Model.SaleDetails?.Immovable.Street,
+                    д. @Model.SaleDetails?.Immovable.House/@Model.SaleDetails?.Immovable.Building, кв. @Model.SaleDetails?.Immovable.Apartment
+                </div>
+            }
+            else
+            {
+                <div>
+                    г. @Model.SaleDetails?.Immovable.City, ул. @Model.SaleDetails?.Immovable.Street,
+                    д. @Model.SaleDetails?.Immovable.House, кв. @Model.SaleDetails?.Immovable.Apartment
+                </div>
+            }
+            <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@Model.SaleDetails?.Immovable.NumberOfRooms
+            <h5 class="font-weight-bold mt-3">Площадь: </h5>@Model.SaleDetails?.Immovable.RoomArea м
+            <sup>
+                <small>2</small>
+            </sup>
+            <h3 class="price font-weight-bold mt-3">Цена:<br> @Model.SaleDetails?.Price ₽</h3>
+        </div>
+        <div class="ml-5 mt-5">
+            <h2></h2>
+            <h5 class="font-weight-bold mt-3">Телефон: </h5>@Model.SaleDetails?.User.PhoneNumber
+            <h5 class="font-weight-bold mt-3">Почта: </h5>@Model.SaleDetails?.User.Email
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <input type="button" class="registerbtn font-weight-bold mt-3" onclick="history.back();" value="Назад"/>
+        @{
+            var user = HttpContext.Items["user"] as User;
+            if (user != null && (Model.AdminUser.Status == Status.Admin) || Model.SaleDetails?.User == Model.AdminUser)
+            {
+                <button type="button" class="registerbtn font-weight-bold ml-3 mt-3" data-toggle="modal" data-target="#editModal">
+                    Редактировать
+                </button>
+            }
+        }
+    </div>
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-light" id="editModalLabel">Редактировать</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="PhotoForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="PhotoForSale"></span>
+                                <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="PhotoForSale">
+                            </div><br>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="Scheme"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="Scheme"></span>
+                                <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="Scheme">
+                            </div><br>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="TypeOfImmovablesForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="TypeOfImmovablesForSale"></span>
+                                <input type="text" asp-for="TypeOfImmovablesForSale" placeholder="Введите тип недвижимости" 
+                                       value="@Model.SaleDetails?.Immovable.TypeOfImmovable">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="CityForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="CityForSale"></span>
+                                <input type="text" asp-for="CityForSale" placeholder="Введите город" 
+                                       value="@Model.SaleDetails?.Immovable.City">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="StreetForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="StreetForSale"></span>
+                                <input type="text" asp-for="StreetForSale" placeholder="Введите улицу" 
+                                       value="@Model.SaleDetails?.Immovable.Street">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="HouseForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="HouseForSale"></span>
+                                <input type="text" asp-for="HouseForSale" placeholder="Введите номер дома" 
+                                       value="@Model.SaleDetails?.Immovable.House">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="BuildingForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="BuildingForSale"></span>
+                                <input type="text" asp-for="BuildingForSale" placeholder="Введите корпус" 
+                                       value="@Model.SaleDetails?.Immovable.Building">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="ApartmentForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="ApartmentForSale"></span>
+                                <input type="text" asp-for="ApartmentForSale" placeholder="Введите номер квартиры" 
+                                       value="@Model.SaleDetails?.Immovable.Apartment">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="NumberOfRoomsForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="NumberOfRoomsForSale"></span>
+                                <input type="number" asp-for="NumberOfRoomsForSale" placeholder="Введите количество комнат"
+                                       value="@Model.SaleDetails?.Immovable.NumberOfRooms">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="RoomAreaForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="RoomAreaForSale"></span>
+                                <input type="number" asp-for="RoomAreaForSale" placeholder="Введите площадь недвижимости" 
+                                       value="@Model.SaleDetails?.Immovable.RoomArea">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="PriceForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="PriceForSale"></span>
+                                <input type="number" asp-for="PriceForSale" placeholder="Введите цену" 
+                                       value="@Model.SaleDetails?.Price">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="registerbtn font-weight-bold" data-dismiss="modal">Закрыть</button>
+                            <input type="submit" asp-page-handler="EditSale" asp-route-id="@Model.SaleDetails?.Id" class="registerbtn font-weight-bold" value="Сохранить">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@if (Model.SaleDetails == null)
+{
+    <div class="row text-light mt-5">
+        <div class="col-lg-5">
+            <h2 class="font-weight-bold">@Model.RentDetails.Immovable.TypeOfImmovable</h2>
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    @if (Model.RentDetails?.Immovable.SchemeImage != null)
+                    {
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img id="myImg" class="d-block w-100 img mt-3" src="@Model.RentDetails?.Immovable.Photo" alt="photo"/>
+                    </div>
+                    @if (Model.RentDetails?.Immovable.SchemeImage != null)
+                    {
+                        <div class="carousel-item">
+                            <img id="myImg2" class="d-block w-100 img mt-3" src="@Model.RentDetails?.Immovable.SchemeImage" alt="scheme"/>
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Следующий</span>
+                </button>
+            </div>
+            
+            <div id="myModal" class="modal">
+                <span class="close1">&times;</span>
+                <img class="modal-content" id="img01">
+            </div>
+
+            <div id="myModal2" class="modal">
+                <span class="close2">&times;</span>
+                <img class="modal-content" id="img02">
+            </div>
+        </div>
+        
+        <div class="ml-5 mt-5">
+            <h5 class="font-weight-bold mt-3">Адрес: </h5>
+            @if (Model.RentDetails.Immovable.Building != 0)
+            {
+                <div>
+                    г. @Model.RentDetails.Immovable.City, ул. @Model.RentDetails.Immovable.Street,
+                    д. @Model.RentDetails.Immovable.House/@Model.RentDetails.Immovable.Building, кв. @Model.RentDetails.Immovable.Apartment
+                </div>
+            }
+            else
+            {
+                <div>
+                    г. @Model.RentDetails.Immovable.City, ул. @Model.RentDetails.Immovable.Street,
+                    д. @Model.RentDetails.Immovable.House, кв. @Model.RentDetails.Immovable.Apartment
+                </div>
+            }
+            <h5 class="font-weight-bold mt-3">Количество комнат: </h5>@Model.RentDetails.Immovable.NumberOfRooms
+            <h5 class="font-weight-bold mt-3">Площадь: </h5>@Model.RentDetails.Immovable.RoomArea м
+            <sup>
+                <small>2</small>
+            </sup>
+            <h3 class="price font-weight-bold mt-3">Цена:<br> @Model.RentDetails.Price ₽</h3>
+        </div>
+        <div class="ml-5 mt-5">
+            <h2></h2>
+            <h5 class="font-weight-bold mt-3">Телефон: </h5>@Model.RentDetails.User.PhoneNumber
+            <h5 class="font-weight-bold mt-3">Почта: </h5>@Model.RentDetails.User.Email
+        </div>
+    </div>
+    
+    <div class="d-flex">
+        <input type="button" class="registerbtn font-weight-bold mt-3" onclick="history.back();" value="Назад"/>
+        @{
+            var user = HttpContext.Items["user"] as User;
+            if (user != null && (Model.AdminUser.Status == Status.Admin) || Model.RentDetails.User == Model.AdminUser)
+            {
+                <button type="button" class="registerbtn font-weight-bold ml-3 mt-3" data-toggle="modal" data-target="#editModal">
+                    Редактировать
+                </button>
+            }
+        }
+    </div>
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-light" id="editModalLabel">Редактировать</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="PhotoForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="PhotoForSale"></span>
+                                <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="PhotoForSale">
+                            </div><br>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="Scheme"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="Scheme"></span>
+                                <input type="file" class="text-light" accept=".jpg, .jpeg, .png, .jfif" asp-for="Scheme">
+                            </div><br>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="TypeOfImmovablesForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="TypeOfImmovablesForSale"></span>
+                                <input type="text" asp-for="TypeOfImmovablesForSale" placeholder="Введите тип недвижимости"
+                                       value="@Model.RentDetails.Immovable.TypeOfImmovable">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="CityForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="CityForSale"></span>
+                                <input type="text" asp-for="CityForSale" placeholder="Введите город" 
+                                       value="@Model.RentDetails.Immovable.City">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="StreetForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="StreetForSale"></span>
+                                <input type="text" asp-for="StreetForSale" placeholder="Введите улицу" 
+                                       value="@Model.RentDetails.Immovable.Street">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="HouseForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="HouseForSale"></span>
+                                <input type="text" asp-for="HouseForSale" placeholder="Введите номер дома"
+                                       value="@Model.RentDetails.Immovable.House">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="BuildingForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="BuildingForSale"></span>
+                                <input type="text" asp-for="BuildingForSale" placeholder="Введите корпус"
+                                       value="@Model.RentDetails.Immovable.Building">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="ApartmentForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="ApartmentForSale"></span>
+                                <input type="text" asp-for="ApartmentForSale" placeholder="Введите номер квартиры"
+                                       value="@Model.RentDetails.Immovable.Apartment">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="NumberOfRoomsForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="NumberOfRoomsForSale"></span>
+                                <input type="number" asp-for="NumberOfRoomsForSale" placeholder="Введите количество комнат"
+                                       value="@Model.RentDetails.Immovable.NumberOfRooms">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="RoomAreaForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="RoomAreaForSale"></span>
+                                <input type="number" asp-for="RoomAreaForSale" placeholder="Введите площадь недвижимости"
+                                       value="@Model.RentDetails.Immovable.RoomArea">
+                            </div>
+
+                            <div>
+                                <label class="font-weight-bold text-light" asp-for="PriceForSale"></label>
+                                <span class="text-danger font-weight-bold" asp-validation-for="PriceForSale"></span>
+                                <input type="number" asp-for="PriceForSale" placeholder="Введите цену"
+                                       value="@Model.RentDetails.Price">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="registerbtn font-weight-bold" data-dismiss="modal">Закрыть</button>
+                            <input type="submit" asp-page-handler="EditRent" asp-route-id="@Model.RentDetails.Id" class="registerbtn font-weight-bold" value="Сохранить">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts
+{
+    <partial name="Shared/_ValidationScriptsPartial"></partial>
+}
